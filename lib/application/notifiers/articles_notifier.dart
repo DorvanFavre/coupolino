@@ -1,12 +1,17 @@
 import 'package:coupolino/domain/entities/article.dart';
 import 'package:coupolino/domain/entities/filter.dart';
+import 'package:coupolino/domain/repositories/article_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ArticlesNotifier extends StateNotifier<List<Article>> {
-  ArticlesNotifier() : super([]);
+  final ArticleRepository articleRepository;
+  ArticlesNotifier(this.articleRepository) : super([]) {
+    getArticles(Filter.all);
+  }
 
-  void loadArticles(Filter filter) {
-    print(filter);
-    state = List.generate(5, (index) => Article());
+  void getArticles(Filter filter) {
+    articleRepository
+        .getAllArticles(filter)
+        .then((articles) => state = articles);
   }
 }
